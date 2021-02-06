@@ -17,29 +17,29 @@
     </head>
     <body>
       <div style="width:25em; margin:auto; font-family:arial, serif;">
-        <h2>Bitcoin Payment</h2>
+        <h2>Dash Payment</h2>
         <p id="status"></p>
         <p id="error"></p>
         <h3>Amount: <span id="amount"></span></h3>
         <h3>Description: <span id="reason"></span></h3>
-	<div id="container">
+        <div id="container">
           <div id="progressbar"></div>
           <br/>
-	  <div>
+          <div>
             <div style="background-color:#7777aa; border-radius: 5px; padding:10px;">
               <a style="color:#ffffff; text-decoration:none;" id="paylink" target="_blank">Click here to pay</a>
             </div>
-	  </div>
+          </div>
           <p id="powered" style="font-size:80%;"></p>
           <br/>
-	  <h3>Payment Request:</h3>
-	  <div id="payreq" style="word-break: break-word; color:#808080;"></div>
-	  <h3>QR Code:</h3>
+          <h3>Payment Request:</h3>
+          <div id="payreq" style="word-break: break-word; color:#808080;"></div>
+          <h3>QR Code:</h3>
           <div id="qrcode" align="center"></div>
-	  <br/>
-	</div>
+          <br/>
+        </div>
       </div>
-	
+
 <script type="text/javascript">
 
 function getUrlParameter(sParam)
@@ -63,22 +63,14 @@ if (id) {
         console.log("getJSON:success");
     })
     .done( function(data) {
-	var qrcode = new QRCode(document.getElementById("qrcode"), {width:400, height:400});
-	var URI;
-	var request;
-	if (data.is_lightning){
-		request = data.invoice;
-		URI = 'lightning:' + request;
-		qrcode.makeCode(data.invoice.toUpperCase());
-	} else {
-		URI = data.URI;
-		if (data.bip70_url) URI += '&r=' + data.bip70_url;
-		request = URI;
-		qrcode.makeCode(URI);
-	}
-	$("#payreq").text(request);
-	$("#reason").text(data.message);
-        $("#amount").text(data.amount_BTC + " BTC");
+        var qrcode = new QRCode(document.getElementById("qrcode"), {width:400, height:400});
+        var URI = data.URI;
+        if (data.bip70_url) URI += '&r=' + data.bip70_url;
+        var request = URI;
+        qrcode.makeCode(URI);
+        $("#payreq").text(request);
+        $("#reason").text(data.message);
+        $("#amount").text(data.amount_BTC + " Dash");
         $("#paylink").attr("href", URI);
         $("<p />").text("Powered by Electrum").appendTo($("p#powered"));
         $(function () {
@@ -138,7 +130,7 @@ if (id) {
 };
 
 // See http://stackoverflow.com/questions/29186154/chrome-clicking-mailto-links-closes-websocket-connection
-$(document).on('click', 'a[href^="bitcoin:"]', function (e) {
+$(document).on('click', 'a[href^="dash:"]', function (e) {
     e.preventDefault();
     var btcWindow = window.open($(e.currentTarget).attr('href'));
     btcWindow.close();
